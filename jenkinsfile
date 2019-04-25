@@ -62,8 +62,6 @@ pipeline {
                 sh 'sudo docker rm nmaprun'
             }
         }
-
-    }
 }
 
 def get_IPAddr(String container) {
