@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+    environment {
+        TARGETCONTAINER="devops_pipeline_demo"
+        DEVSECOPSREPOURI="devsecopslab/"
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'echo ""'
+                sh 'echo "..... Build Phase Started :: Compiling Source Code :: ......"'
+                sh '''
+                    cd java_web_code
+                    mvn install
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'echo ""'
+                sh 'echo "..... Test Phase Started :: Testing via Automated Scripts :: ......"'
+                sh '''
+                    cd ../integration-testing/
+                    mvn clean verify -P integration-test
+                '''
+            }
+        }
+        stage('Integration Phase') {
+            steps {
+                sh 'echo ""'
+                sh 'echo ""..... Integration Phase Started :: Copying Artifacts :: ......"'
+                sh '''
+                    cd ../java_web_code/target/
+                    cp wildfly-spring-boot-sample-1.0.0.war ../../docker/
+                '''
+                }
+            }
+        }
+        stage('Provisioning Phase') {
+            steps {
+                sh '''
+                    cd ../../docker/
+                    sudo docker build -t $TARGETCONTAINER .
+                '''
+                }
+            }
+        }
+        stage('Start Container') {
+            environment {
+                RUNNING=$(sh 'sudo docker inspect --format="{{ .State.Running }}" $TARGETCONTAINER 2> /dev/null')
+            }
+            steps {
+                sh 'echo ""'
+                sh 'echo "..... Pre-Deployment Phase Started :: Running Docker Container :: ......"'
+                sh 'sudo docker run -d -p 8180:8080 --name devops_pipeline_demo devops_pipeline_demo'
+            }
+        }
+        stage('Run Security Tests') {
+            environment {
+                IPADDRESS=$(sh 'sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $TARGETCONTAINER')
+            }
+            steps {
+                sh 'echo ""'
+                sh 'echo "..............RUNNING NMAP SCAN............."'
+                sh 'sudo docker run --name nmaprun -v "$WORKSPACE"/reports:/data "$DEVSECOPSREPOURI"nmapimagev1 -A -T4 -oX "$JOB_NAME"-$BUILD_NUMBER-nmap.xml $IPADDRESS
+sudo docker rm nmaprun'
+            }
+        }
+
+    }
+}
