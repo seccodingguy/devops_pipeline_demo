@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Test') {
             environment {
-                IPADDRESS=get_IPAddr($TARGETCONTAINER)
+                IPADDRESS=get_IPAddr(env.TARGETCONTAINER)
             }
             steps {
                 sh 'echo ""'
@@ -33,13 +33,13 @@ pipeline {
                     cp wildfly-spring-boot-sample-1.0.0.war ../../docker/
                 '''
                 sh 'cd ../../docker/'
-                sh 'sudo docker build -t $TARGETCONTAINER .'
+                sh 'sudo docker build -t env.TARGETCONTAINER .'
                 sh 'echo ""'
                 sh 'echo "..... Pre-Deployment Phase Started :: Running Docker Container :: ......"'
                 sh 'sudo docker run -d -p 8180:8080 --name devops_pipeline_demo devops_pipeline_demo'
                 sh 'echo ""'
                 sh 'echo "..............RUNNING NMAP SCAN............."'
-                sh 'sudo docker run --name nmaprun -v "$WORKSPACE"/reports:/data "$DEVSECOPSREPOURI"nmapimagev1 -A -T4 -oX "$JOB_NAME"-$BUILD_NUMBER-nmap.xml $IPADDRESS'
+                sh 'sudo docker run --name nmaprun -v "$WORKSPACE"/reports:/data "env.DEVSECOPSREPOURI"nmapimagev1 -A -T4 -oX "$JOB_NAME"-$BUILD_NUMBER-nmap.xml env.IPADDRESS'
                 sh 'sudo docker rm nmaprun'
             }
         }
