@@ -54,7 +54,7 @@ pipeline {
         }
         stage('Run Security Tests') {
             environment {
-                IPADDRESS=$(sh 'sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $TARGETCONTAINER')
+                IPADDRESS=get_IPAddr($TARGETCONTAINER)
             }
             steps {
                 sh 'echo ""'
@@ -64,5 +64,11 @@ sudo docker rm nmaprun'
             }
         }
 
+    }
+}
+
+def get_IPAddr(String container) {
+    node('master') {
+        return sh 'sudo docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" ${container}'
     }
 }
