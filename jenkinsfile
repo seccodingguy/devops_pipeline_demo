@@ -59,8 +59,8 @@ pipeline {
             steps {
                 sh 'echo ""'
                 sh 'echo "..............RUNNING NMAP SCAN............."'
-                sh 'sudo docker run --name nmaprun -v "$WORKSPACE"/reports:/data "$DEVSECOPSREPOURI"nmapimagev1 -A -T4 -oX "$JOB_NAME"-$BUILD_NUMBER-nmap.xml $IPADDRESS
-sudo docker rm nmaprun'
+                sh 'sudo docker run --name nmaprun -v "$WORKSPACE"/reports:/data "$DEVSECOPSREPOURI"nmapimagev1 -A -T4 -oX "$JOB_NAME"-$BUILD_NUMBER-nmap.xml $IPADDRESS'
+                sh 'sudo docker rm nmaprun'
             }
         }
 
