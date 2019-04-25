@@ -66,6 +66,6 @@ pipeline {
 
 def get_IPAddr(String container) {
     node('master') {
-        return sh 'sudo docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" ${container}'
+        return sh label: '', script: 'sudo docker inspect -f \'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}\' ${container}'
     }
 }
