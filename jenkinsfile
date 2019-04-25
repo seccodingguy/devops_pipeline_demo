@@ -38,10 +38,8 @@ pipeline {
         }
         stage('Provisioning Phase') {
             steps {
-                sh '''
-                    cd ../../docker/
-                    sudo docker build -t $TARGETCONTAINER .
-                '''
+                sh 'cd ../../docker/'
+                sh label: '', script: 'sudo docker build -t $TARGETCONTAINER .'
             }
         }
         stage('Start Container') {
