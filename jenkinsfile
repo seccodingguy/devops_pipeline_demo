@@ -42,7 +42,6 @@ pipeline {
                     cd ../../docker/
                     sudo docker build -t $TARGETCONTAINER .
                 '''
-                }
             }
         }
         stage('Start Container') {
