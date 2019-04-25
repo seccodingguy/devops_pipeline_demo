@@ -46,6 +46,7 @@ pipeline {
     }   
 }
 
+@NonCPS
 def get_IPAddr(String container) {
     cmd = { 
         node {
