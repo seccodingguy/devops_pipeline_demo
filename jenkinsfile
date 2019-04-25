@@ -42,13 +42,14 @@ pipeline {
                 sh 'sudo docker run --name nmaprun -v "$WORKSPACE"/reports:/data "$DEVSECOPSREPOURI"nmapimagev1 -A -T4 -oX "$JOB_NAME"-$BUILD_NUMBER-nmap.xml $IPADDRESS'
                 sh 'sudo docker rm nmaprun'
             }
-        
+        }
+    }   
 }
 
 def get_IPAddr(String container) {
     cmd = { 
         node {
-            sh label: '', script: 'sudo docker inspect -f \'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}\' ${container}'
+            sh 'sudo docker inspect -f \'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}\' ${container}'
         }
     }
     return cmd
