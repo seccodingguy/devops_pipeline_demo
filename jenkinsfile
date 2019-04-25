@@ -46,9 +46,6 @@ pipeline {
             }
         }
         stage('Start Container') {
-            environment {
-                RUNNING=$(sh 'sudo docker inspect --format="{{ .State.Running }}" $TARGETCONTAINER 2> /dev/null')
-            }
             steps {
                 sh 'echo ""'
                 sh 'echo "..... Pre-Deployment Phase Started :: Running Docker Container :: ......"'
