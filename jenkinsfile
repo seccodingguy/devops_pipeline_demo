@@ -25,7 +25,7 @@ pipeline {
                 '''
             }
         }
-        stage('Integration Phase') {
+        stage('IntegrationPhase') {
             steps {
                 sh 'echo ""'
                 sh 'echo ""..... Integration Phase Started :: Copying Artifacts :: ......"'
@@ -36,20 +36,20 @@ pipeline {
                 }
             }
         }
-        stage('Provisioning Phase') {
+        stage('ProvisioningPhase') {
             steps {
                 sh 'cd ../../docker/'
                 sh label: '', script: 'sudo docker build -t $TARGETCONTAINER .'
             }
         }
-        stage('Start Container') {
+        stage('StartContainer') {
             steps {
                 sh 'echo ""'
                 sh 'echo "..... Pre-Deployment Phase Started :: Running Docker Container :: ......"'
                 sh 'sudo docker run -d -p 8180:8080 --name devops_pipeline_demo devops_pipeline_demo'
             }
         }
-        stage('Run Security Tests') {
+        stage('RunSecurityTests') {
             environment {
                 IPADDRESS=get_IPAddr($TARGETCONTAINER)
             }
