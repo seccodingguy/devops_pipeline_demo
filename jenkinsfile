@@ -16,16 +16,16 @@ pipeline {
                 sh 'echo ""'
                 sh 'echo "..... Test Phase Started :: Testing via Automated Scripts :: ......"'
                 sh '''
-                    cd "$WORKSPACE"/java_web_code/integration-testing/
+                    cd "$WORKSPACE"/integration-testing/
                     mvn clean verify -P integration-test
                 '''
                 sh 'echo ""'
                 sh 'echo ""..... Integration Phase Started :: Copying Artifacts :: ......"'
                 sh '''
-                    cd ../java_web_code/target/
-                    cp wildfly-spring-boot-sample-1.0.0.war ../../docker/
+                    cd "$WORKSPACE"/java_web_code/target/
+                    cp wildfly-spring-boot-sample-1.0.0.war "$WORKSPACE"/docker/
                 '''
-                sh 'cd ../../docker/'
+                sh 'cd "$WORKSPACE"/docker/'
                 sh 'sudo docker build -t env.TARGETCONTAINER .'
             }
         }
