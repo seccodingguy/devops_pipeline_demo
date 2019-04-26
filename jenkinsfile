@@ -26,7 +26,7 @@ pipeline {
                     cp wildfly-spring-boot-sample-1.0.0.war "$WORKSPACE"/docker/
                 '''
                 sh 'cd "$WORKSPACE"/docker/'
-                sh 'sudo docker build -t env.TARGETCONTAINER .'
+                sh 'sudo docker build -t $TARGETCONTAINER .'
             }
         }
         stage('Test') {
