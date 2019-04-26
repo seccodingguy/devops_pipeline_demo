@@ -20,7 +20,7 @@ pipeline {
                     mvn clean verify -P integration-test
                 '''
                 sh 'echo ""'
-                sh 'echo ""..... Integration Phase Started :: Copying Artifacts :: ......"'
+                sh 'echo "..... Integration Phase Started :: Copying Artifacts :: ......"'
                 sh '''
                     cd "$WORKSPACE"/java_web_code/target/
                     cp wildfly-spring-boot-sample-1.0.0.war "$WORKSPACE"/docker/
